@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="cz.matyapav.valentinesday.MainActivity">
+    <ImageView
+        android:scaleType="fitXY"
+        android:id="@+id/background_two"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"/>
+    <ImageView
+        android:scaleType="fitXY"
+        android:id="@+id/background_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"/>
+    <!-- Shooter space -->
+    <RelativeLayout
+        android:id="@+id/shooterLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+            <View
+                android:id="@+id/circle"
+                android:layout_width="@dimen/playerWidth"
+                android:layout_height="@dimen/playerHeight"
+                android:layout_centerVertical="true"
+                android:background="@drawable/valentine"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <!--Space for hearts -->
+    <RelativeLayout
+        android:id="@+id/heartLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <!-- User interface -->
+    <LinearLayout
+        android:id="@+id/uiLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginRight="100dp"
+        android:weightSum="100">
+        <Button
+            android:id="@+id/upButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorTransparent"
+            android:layout_weight="50"/>
+        <Button
+            android:id="@+id/downButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorTransparent"
+            android:layout_weight="50" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="10dp"
+        android:gravity="right"
+        android:layout_alignParentRight="true">
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="@color/colorAccent"
+            android:text="Score:"
+            />
+        <TextView
+            android:id="@+id/lives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:textSize="20dp"
+            android:text="Lives:"
+            />
+        <CheckBox
+            android:id="@+id/soundButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:button="@drawable/sound_checkbox"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/shootButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:alpha="0.25"
+        android:src="@drawable/shooticon"
+        android:background="@color/colorTransparent"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
+    </ImageButton>
+</RelativeLayout>
