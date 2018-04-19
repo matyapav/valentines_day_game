@@ -1,7 +1,6 @@
 package cz.matyapav.valentinesday;
 
 import android.app.Activity;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +20,7 @@ public class Controls {
     private CheckBox buttonSound;
     private Game game;
 
-    public Controls( Button buttonUp, Button buttonDown, ImageButton buttonShoot, CheckBox buttonSound, Game game) {
+    public Controls(Button buttonUp, Button buttonDown, ImageButton buttonShoot, CheckBox buttonSound, Game game) {
         this.buttonDown = buttonDown;
         this.buttonShoot = buttonShoot;
         this.buttonUp = buttonUp;
@@ -29,7 +28,8 @@ public class Controls {
         this.game = game;
     }
 
-    public void init(){
+    public void init() {
+
         buttonUp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -63,14 +63,14 @@ public class Controls {
         SoundManager.toggleSounds();
     }
 
-    private void movePlayerUp(){
+    private void movePlayerUp() {
         View player = game.getPlayer();
-        if(player.getY()-Constants.MOVING_SPEED > 0) {
+        if (player.getY() - Constants.MOVING_SPEED > 0) {
             player.setY(player.getY() - Constants.MOVING_SPEED);
         }
     }
 
-    private void movePlayerDown(){
+    private void movePlayerDown() {
         View player = game.getPlayer();
         Activity activity = game.getActivity();
         RelativeLayout layout = game.getLayout();
@@ -80,12 +80,15 @@ public class Controls {
         }
     }
 
-    private void shoot(){
-        final View shoot = game.createShoot();
-        RelativeLayout layout = game.getLayout();
-        layout.addView(shoot);
-        game.registerShootMoveHandler(shoot);
+    private void shoot() {
+        if (game.getArrowsCount() > 0) {
+            final View shoot = game.createShoot();
+            RelativeLayout layout = game.getLayout();
+            layout.addView(shoot);
+            game.registerShootMoveHandler(shoot);
+            game.decreaseArrowCount();
+        }
     }
-    
-    
+
+
 }

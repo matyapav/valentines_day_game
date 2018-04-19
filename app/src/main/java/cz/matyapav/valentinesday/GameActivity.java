@@ -18,8 +18,6 @@ import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
-
-
     Game game;
     Button buttonUp;
     Button buttonDown;
@@ -30,7 +28,6 @@ public class GameActivity extends AppCompatActivity {
     TextView livesView;
     RelativeLayout heartsLayout;
     View player;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

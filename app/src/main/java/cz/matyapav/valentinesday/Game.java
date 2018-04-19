@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,9 @@ public class Game {
     private int lives = Constants.DEFAULT_LIVES;
     private int hearthSpeed = Constants.DEFAULT_HEART_SPEED;
     private double spawnSeconds = Constants.DEFAULT_SPAWN_SECONDS;
+
+    private int arrowsCount = Constants.QUIVER_SIZE;
+    private View[] arrows;
 
     private int nextLevelIn = 50;
     private int nextSpeedIn = 100;
@@ -52,6 +56,21 @@ public class Game {
         this.livesView = livesView;
         this.scoreView = scoreView;
         this.layout = layout;
+        this.arrows = new View[Constants.QUIVER_SIZE];
+        fillQuiverWithArrows();
+
+    }
+
+    private void fillQuiverWithArrows() {
+        LinearLayout arrowsCountLayout = (LinearLayout) activity.findViewById(R.id.arrowsCount);
+        for (int i = 0; i < Constants.QUIVER_SIZE; i++) {
+            ImageView arrowView = new ImageView(activity.getApplicationContext());
+            arrowView.setBackground(activity.getResources().getDrawable(R.drawable.circle));
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(Utils.convertDpToPixel(10), Utils.convertDpToPixel(10));
+            arrowView.setLayoutParams(params);
+            arrowsCountLayout.addView(arrowView);
+            arrows[i] = arrowView;
+        }
     }
 
     public void registerShootMoveHandler(final View shoot) {
@@ -85,7 +104,7 @@ public class Game {
                 layout.addView(hearthView);
                 hearts.add(heart);
                 registerHeartMoveHandler(heart);
-                heartSpawnHandler.postDelayed(this, (long) (spawnSeconds*1000));
+                heartSpawnHandler.postDelayed(this, (long) (spawnSeconds * 1000));
             }
         };
         heartSpawnHandler.postDelayed(heartsSpawnRunnable, (long) (spawnSeconds * 1000));
@@ -122,7 +141,7 @@ public class Game {
 
         boolean newBestScore = false;
         //set new best score if any
-        if(score > topScore) {
+        if (score > topScore) {
             SharedPreferences settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             newBestScore = true;
@@ -134,21 +153,21 @@ public class Game {
         Intent i = new Intent(getActivity(), GameOverActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("score", score);
-        if(newBestScore){
+        if (newBestScore) {
             i.putExtra("newBest", true);
         }
         getActivity().startActivity(i);
         getActivity().finish();
     }
 
-    public void clearHandlers(){
+    public void clearHandlers() {
         heartSpawnHandler.removeCallbacksAndMessages(null);
         heartMoveHandler.removeCallbacksAndMessages(null);
         shootMoveHandler.removeCallbacksAndMessages(null);
         hideScoreHandler.removeCallbacksAndMessages(null);
     }
 
-    public void clearGameSpace(){
+    public void clearGameSpace() {
         layout.removeAllViews();
         hearts.clear();
     }
@@ -200,23 +219,23 @@ public class Game {
         return false;
     }
 
-    private void setScore(final int points){
+    private void setScore(final int points) {
         score += points;
         scoreView.setText("Score: " + score);
-        if(score > nextLevelIn){
+        if (score > nextLevelIn) {
 
-            if(spawnSeconds > 0.75) {
+            if (spawnSeconds > 0.75) {
                 spawnSeconds = (spawnSeconds - 0.2);
             }
             nextLevelIn += 50;
         }
-        if(score > nextSpeedIn){
-            hearthSpeed = (int) (hearthSpeed*Constants.SPEED_MULTIPLIER);
+        if (score > nextSpeedIn) {
+            hearthSpeed = (int) (hearthSpeed * Constants.SPEED_MULTIPLIER);
             nextSpeedIn += 100;
         }
     }
 
-    private void showScoreInEventLog(int score, float x, float y){
+    private void showScoreInEventLog(int score, float x, float y) {
         final TextView addScore = new TextView(getActivity());
         addScore.setText("+ " + score);
         addScore.setTextSize(20);
@@ -276,23 +295,50 @@ public class Game {
         this.topScore = topScore;
     }
 
-    public void startMusic(){
+    public void startMusic() {
         mediaPlayer = MediaPlayer.create(getActivity(), R.raw.gametheme);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
     }
 
-    public void toggleMusic(){
+    public void toggleMusic() {
         musicMuted = !musicMuted;
-        if(musicMuted){
-            mediaPlayer.setVolume(0,0);
-        }else{
-            mediaPlayer.setVolume(1,1);
+        if (musicMuted) {
+            mediaPlayer.setVolume(0, 0);
+        } else {
+            mediaPlayer.setVolume(1, 1);
         }
     }
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public double getArrowsCount() {
+        return arrowsCount;
+    }
+
+    public void decreaseArrowCount() {
+        arrowsCount--;
+        arrows[arrowsCount].setVisibility(View.INVISIBLE);
+        if (arrowsCount == 0) {
+            reload();
+        }
+
+    }
+
+    private void reload() {
+        Handler reloadHandler = new Handler();
+        Runnable reloadRunnable = new Runnable() {
+            @Override
+            public void run() {
+                arrowsCount = Constants.QUIVER_SIZE;
+                for (int i = 0; i < arrows.length; i++) {
+                    arrows[i].setVisibility(View.VISIBLE);
+                }
+            }
+        };
+        reloadHandler.postDelayed(reloadRunnable, (long) (Constants.RELOAD_TIME * 1000));
     }
 }
 
